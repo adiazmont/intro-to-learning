@@ -11,6 +11,7 @@
 
 import numpy as np
 import pandas as pd
+from mlxtend.data import loadlocal_mnist
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from collections import Counter
@@ -25,7 +26,7 @@ def euclidean_distance(row1, row2):
     """
     distance = 0.0
     for i in range(len(row1) - 1):
-        distance += (row1[i] - row2[i]) ** 2
+        distance += (int(row1[i]) - int(row2[i])) ** 2
     return np.sqrt(distance)
 
 
@@ -41,7 +42,7 @@ def nearest_neighbor(x_trainset, y_trainset, unknown, k=1):
     # store distances from all samples to the unknown
     distances = []
     for i, sample in enumerate(x_trainset):
-        distances.append((y_trainset[i][0], euclidean_distance(sample, unknown)))
+        distances.append((y_trainset[i], euclidean_distance(sample, unknown)))
 
     # sort the distances in ascending order
     distances.sort(key=lambda x: x[1])
@@ -68,7 +69,7 @@ def evaluate_knn(X_train, X_test, y_train, y_test, k=1):
     :return: print accuracy of model
     """
     # number of samples to be considered in evaluation
-    trainset_size = 3000
+    trainset_size = 100
     # number of tests to evaluate
     testset_size = 100
 
@@ -100,7 +101,7 @@ def sklearn_knn(X_train, X_test, y_train, y_test, k=1):
     :return: print accuracy of model
     """
     # number of samples to be considered in evaluation
-    trainset_size = 3000
+    trainset_size = 100
     # number of tests to evaluate
     testset_size = 100
 
@@ -115,8 +116,13 @@ def sklearn_knn(X_train, X_test, y_train, y_test, k=1):
 
 def main():
     # Store image descriptors and labels from dataset
-    X = np.array(pd.read_csv('dataset/images.csv', header=None))
-    y = np.array(pd.read_csv('dataset/labels.csv', header=None))
+    # X = np.array(pd.read_csv('dataset/images.csv', header=None))
+    # y = np.array(pd.read_csv('dataset/labels.csv', header=None))
+    X, y = loadlocal_mnist(
+        images_path='dataset/train-images.idx3-ubyte',
+        labels_path='dataset/train-labels.idx1-ubyte')
+    X = np.array(X)
+    y = np.array(y)
 
     print('Dimensions of the dataset (samples): %s x %s' % (X.shape[0], X.shape[1]))
     print('Dimensions of the dataset (labels): %s' % len(y))
