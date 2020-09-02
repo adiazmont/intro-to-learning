@@ -10,7 +10,6 @@
 """
 
 import numpy as np
-import pandas as pd
 from mlxtend.data import loadlocal_mnist
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
@@ -121,8 +120,6 @@ def main():
     X, y = loadlocal_mnist(
         images_path='dataset/train-images.idx3-ubyte',
         labels_path='dataset/train-labels.idx1-ubyte')
-    X = np.array(X)
-    y = np.array(y)
 
     print('Dimensions of the dataset (samples): %s x %s' % (X.shape[0], X.shape[1]))
     print('Dimensions of the dataset (labels): %s' % len(y))
